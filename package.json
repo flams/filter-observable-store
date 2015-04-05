@@ -10,7 +10,7 @@
     }
   ],
   "files": [
-    "src",
+    "index.js",
     "LICENSE"
   ],
   "author": "Olivier Scherrer <pode.fr@gmail.com>",
@@ -33,5 +33,10 @@
     "test": "mocha --harmony specs/*",
     "watch": "mocha --watch --harmony specs/*",
     "jshint": "jshint src/* specs/*"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "observable-store": "0.0.3",
+    "sinon": "^1.14.1"
   }
 }
