@@ -82,7 +82,7 @@ describe("GIVEN filter", function () {
             beforeEach(function () {
                 spy = sinon.spy();
 
-                filter.watch("filter", spy);
+                filter.watch("filtered", spy);
                 filter.setFilter(function (value) {
                     return !(value % 2);
                 }, scope);
@@ -106,6 +106,74 @@ describe("GIVEN filter", function () {
                     expect(loopSpy.calledWith(2, 2)).to.equal(true);
                     expect(loopSpy.calledWith(3, 3)).to.equal(false);
                     expect(loopSpy.calledWith(4, 4)).to.equal(true);
+                });
+            });
+
+            describe("WHEN subscribing to events on specific values", function () {
+                var eventSpy0, eventSpy1;
+                beforeEach(function () {
+                    eventSpy0 = sinon.spy();
+                    eventSpy1 = sinon.spy();
+                    filter.watchValue(0, eventSpy0);
+                    filter.watchValue(1, eventSpy1);
+
+                    filter.set(0, 10);
+                    filter.set(1, 11);
+                });
+
+                it("THEN triggers an updated event if the value matches with the filter", function () {
+                    expect(eventSpy0.calledWith(10, "updated", 0)).to.equal(true);
+                });
+
+                it("THEN doesn't trigger an updated event if the value doesn't match", function () {
+                    expect(eventSpy1.called).to.equal(false);
+                });
+            });
+
+            describe("WHEN subscribing to generic events on the array", function () {
+                var eventSpyAdded, eventSpyUpdated, eventSpyDeleted;
+
+                beforeEach(function () {
+                    eventSpyAdded = sinon.spy();
+                    eventSpyUpdated = sinon.spy();
+                    eventSpyDeleted = sinon.spy();
+
+                    filter.watch("added", eventSpyAdded);
+                    filter.watch("updated", eventSpyUpdated);
+                    filter.watch("deleted", eventSpyDeleted);
+
+                    filter.alter("push", 5);
+                    filter.alter("push", 6);
+
+                    filter.set(5, 20);
+                    filter.set(6, 21);
+
+                    filter.alter("pop");
+                    filter.alter("pop");
+                });
+
+                it("THEN doesn't trigger a push event for new items that don't match", function () {
+                    expect(eventSpyAdded.calledWith(5, 5)).to.equal(false);
+                });
+
+                it("THEN triggers a push event for new items that match", function () {
+                    expect(eventSpyAdded.calledWith(6, 6)).to.equal(true);
+                });
+
+                it("THEN triggers an updated event for new items that match", function () {
+                    expect(eventSpyUpdated.calledWith(5, 20)).to.equal(true);
+                });
+
+                it("THEN doesn't trigger an updated event for new items that don't match", function () {
+                    expect(eventSpyUpdated.calledWith(6, 21)).to.equal(false);
+                });
+
+                it("THEN triggers a deleted event for items that matched", function () {
+                    expect(eventSpyDeleted.calledWith(5)).to.equal(true);
+                });
+
+                it("THEN doesn't trigger a deleted event for items that didn't match", function () {
+                    expect(eventSpyDeleted.calledWith(6)).to.equal(false);
                 });
             });
 

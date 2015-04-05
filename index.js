@@ -32,15 +32,31 @@ module.exports = function Filter(observableStore) {
 
         count: function () {
             return observableStore
-                .dump()
-                .filter(_predicate)
+                .proxy("filter", _predicate)
                 .length;
+        },
+
+        watchValue: function (index, callback, scope) {
+            return observableStore.watchValue(index, function (newValue) {
+                if (_predicate(newValue)) {
+                    callback.apply(scope, arguments);
+                }
+            });
+        },
+
+        watch: function (action, callback, scope) {
+            return observableStore.watch(action, function (index, newValue, oldValue) {
+                if ((action == "deleted" && _predicate(oldValue))
+                    || (action != "deleted" && _predicate(newValue))) {
+                    callback.apply(scope, arguments);
+                }
+            });
         }
     });
 
     function setFilter(predicate) {
         _predicate = predicate;
-        _storeObservable.notify("filter");
+        _storeObservable.notify("filtered");
     }
 
 };
