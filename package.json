@@ -1,7 +1,7 @@
 {
   "name": "filter-observable-store",
   "description": "Filter down an observable-store",
-  "version": "0.0.1-wip",
+  "version": "0.0.1",
   "homepage": "https://github.com/flams/filter-observable-store",
   "licenses": [
     {
