@@ -119,6 +119,43 @@ describe("GIVEN filter", function () {
                     expect(count).to.equal(3);
                 });
             });
+
+            describe("WHEN clearing the filter", function () {
+                beforeEach(function () {
+                    filter.clearFilter();
+                });
+
+                it("THEN triggers another filter event", function () {
+                    expect(spy.calledTwice).to.equal(true);
+                });
+
+                describe("WHEN looping over the items", function () {
+                    var loopSpy;
+                    beforeEach(function () {
+                        loopSpy = sinon.spy();
+                        filter.loop(loopSpy);
+                    });
+
+                    it("THEN loops through all the items again", function () {
+                        expect(loopSpy.calledWith(0, 0)).to.equal(true);
+                        expect(loopSpy.calledWith(1, 1)).to.equal(true);
+                        expect(loopSpy.calledWith(2, 2)).to.equal(true);
+                        expect(loopSpy.calledWith(3, 3)).to.equal(true);
+                        expect(loopSpy.calledWith(4, 4)).to.equal(true);
+                    });
+                });
+
+                describe("WHEN getting the count", function () {
+                    var count;
+                    beforeEach(function () {
+                        count = filter.count();
+                    });
+
+                    it("Then returns the full count", function () {
+                        expect(count).to.equal(5);
+                    });
+                });
+            });
         });
     });
 

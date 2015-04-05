@@ -15,9 +15,11 @@ module.exports = function Filter(observableStore) {
 
     return extend(observableStore, {
         setFilter: function (filterFn, scope) {
-            _predicate = getPredicate(filterFn, scope);
+            setFilter(getPredicate(filterFn, scope));
+        },
 
-            _storeObservable.notify("filter");
+        clearFilter: function () {
+            setFilter(getDefaultPredicate());
         },
 
         loop: function (fn, scope) {
@@ -35,6 +37,11 @@ module.exports = function Filter(observableStore) {
                 .length;
         }
     });
+
+    function setFilter(predicate) {
+        _predicate = predicate;
+        _storeObservable.notify("filter");
+    }
 
 };
 
