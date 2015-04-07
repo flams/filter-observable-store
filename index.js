@@ -36,6 +36,15 @@ module.exports = function Filter(observableStore) {
                 .length;
         },
 
+        has: function (item) {
+            var hasItem = observableStore.has(item);
+            if (hasItem) {
+                return _predicate(observableStore.get(item));
+            } else {
+                return false;
+            }
+        },
+
         watchValue: function (index, callback, scope) {
             return observableStore.watchValue(index, function (newValue) {
                 if (_predicate(newValue)) {

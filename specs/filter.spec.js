@@ -76,6 +76,22 @@ describe("GIVEN filter", function () {
             });
         });
 
+        describe("WHEN testing if the model has a specific value", function () {
+            var has, hasNot;
+            beforeEach(function () {
+                has = filter.has(3);
+                hasNot = filter.has(10);
+            });
+
+            it("THEN tells if it doesn't have a specific value", function () {
+                expect(has).to.equal(true);
+            });
+
+            it("THEN tells if does have a specific value", function () {
+                expect(hasNot).to.equal(false);
+            });
+        });
+
         describe("WHEN setting a filter to get the even values", function () {
             var spy, scope = {};
 
@@ -152,27 +168,27 @@ describe("GIVEN filter", function () {
                     filter.alter("pop");
                 });
 
-                it("THEN doesn't trigger a push event for new items that don't match", function () {
+                it("THEN doesn't trigger an added event for new items that don't match", function () {
                     expect(eventSpyAdded.calledWith(5, 5)).to.equal(false);
                 });
 
-                it("THEN triggers a push event for new items that match", function () {
+                it("THEN triggers an added event for new items that match", function () {
                     expect(eventSpyAdded.calledWith(6, 6)).to.equal(true);
                 });
 
-                it("THEN triggers an updated event for new items that match", function () {
-                    expect(eventSpyUpdated.calledWith(5, 20)).to.equal(true);
+                it("THEN triggers an add event for updated items that match", function () {
+                    expect(eventSpyAdded.calledWith(5, 20)).to.equal(true);
                 });
 
                 it("THEN doesn't trigger an updated event for new items that don't match", function () {
                     expect(eventSpyUpdated.calledWith(6, 21)).to.equal(false);
                 });
 
-                it("THEN triggers a deleted event for items that matched", function () {
+                it("THEN triggers a deleted event for deleted items that matched", function () {
                     expect(eventSpyDeleted.calledWith(5)).to.equal(true);
                 });
 
-                it("THEN doesn't trigger a deleted event for items that didn't match", function () {
+                it("THEN doesn't trigger a deleted event for deleted items that didn't match", function () {
                     expect(eventSpyDeleted.calledWith(6)).to.equal(false);
                 });
             });
@@ -185,6 +201,22 @@ describe("GIVEN filter", function () {
 
                 it("Then only counts the items that match with the filter", function () {
                     expect(count).to.equal(3);
+                });
+            });
+
+            describe("WHEN testing if the filtered model has a specific value", function () {
+                var has, hasNot;
+                beforeEach(function () {
+                    has = filter.has(2);
+                    hasNot = filter.has(3);
+                });
+
+                it("THEN tells if it doesn't have a specific value", function () {
+                    expect(has).to.equal(true);
+                });
+
+                it("THEN tells if does have a specific value", function () {
+                    expect(hasNot).to.equal(false);
                 });
             });
 
