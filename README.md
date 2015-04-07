@@ -38,12 +38,20 @@ filter.loop(function (value) {
     // value... 10, 15...
 });
 
+// See if an item is in the filtered model
+filter.has(5); // false
+filter.has(10); // true
+
 // Clear filter
 filter.clearFilter();
 
 ```
 
 ## Changelog
+
+### 0.0.2 - 6 APR 2015
+
+* Add filtered has()
 
 ### 0.0.1 - 5 APR 2015
 
